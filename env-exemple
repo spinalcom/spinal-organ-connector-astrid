@@ -20,5 +20,4 @@ CLIENT_SECRET=REPLACE_WITH_CLIENT_SECRET
 SCOPE=REPLACE_WITH_SCOPE
 GRANT_TYPE=client_credentials # keep it as is
 
-#API related info
-PULL_INTERVAL=300000
+PULL_INTERVAL=300000 # time in milliseconds between each data pull (default: 5 minutes)
