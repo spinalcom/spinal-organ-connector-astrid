@@ -5,7 +5,7 @@ import { IMeasurementValue } from '../../interfaces/api/IMeasurementValue';
 import { IBuilding } from '../../interfaces/api/IBuilding';
 import { IDevice } from '../../interfaces/api/IDevice';
 import { IFloor } from '../../interfaces/api/IFloor';
-
+import { ISpace } from '../../interfaces/api/ISpace';
 
 interface TokenData {
   accessToken: string;
@@ -193,6 +193,11 @@ export class ClientApi {
   async getBuildingDevices(buildingId:string, take: number = 1000) {
     return this.getWithRetry<IDevice[]>(`/Buildings/${buildingId}/Devices?ontologyType=Occupancy_Sensor_Equipment&take=${take}`);
   }
+
+  async getBuildingSpaces(buildingId:string, take: number = 1000) {
+    return this.getWithRetry<ISpace[]>(`/Buildings/${buildingId}/Spaces?take=${take}`);
+  }
+
 
 
 }

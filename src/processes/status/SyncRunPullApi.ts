@@ -261,6 +261,24 @@ export class SyncRunPullApi {
 
   }
 
+  async addSpaceNameAttributeInDevices(){
+    const spaces = await this.apiClient.getBuildingSpaces(this.clientBuilding.id, this.clientBuilding.spaceCount);
+    const deviceNodes = await this.nwVirtual.getChildren('hasBmsDevice');
+    for( const deviceNode of deviceNodes) {
+      SpinalGraphService._addNode(deviceNode);
+
+      const spaceIdAttribute = await attributeService.findOneAttributeInCategory(deviceNode, 'Api_Attributes', 'spaceId');
+      if( spaceIdAttribute === -1 )  continue;
+      const spaceId = spaceIdAttribute.value.get();
+
+      const space = spaces.find(s => s.id === spaceId);
+      if(!space) continue;
+      console.log(`Adding space name attribute for device ${deviceNode.getName().get()} with space ${space.name}`);
+      await attributeService.addAttributeByCategoryName(deviceNode, 'Api_Attributes', 'spaceName', space.name);
+    }
+
+  }
+
   async init(): Promise<void> {
     console.log('Initiating SyncRunPull');
     try {
@@ -274,6 +292,8 @@ export class SyncRunPullApi {
       this.clientBuilding = buildings.find(b => b.name === 'ASTRID');
       if (!this.clientBuilding) throw new Error('Building ASTRID not found in API response. Perhaps database has changed?');
       console.log('Fetching building data...')
+
+      // await this.addSpaceNameAttributeInDevices();
       let [buildingDevices, buildingMeasures] = await Promise.all([
         this.apiClient.getBuildingDevices(this.clientBuilding.id,this.clientBuilding.deviceCount), // Will only get Occupancy_Sensor_Equipment devices
         this.apiClient.getBuildingMeasurementValues(this.clientBuilding.id,this.clientBuilding.measurementCount) // Will get all measurement values ( including temperature stuff, but will get filtered out)
