@@ -296,7 +296,7 @@ export class SyncRunPullApi {
       // await this.addSpaceNameAttributeInDevices();
       let [buildingDevices, buildingMeasures] = await Promise.all([
         this.apiClient.getBuildingDevices(this.clientBuilding.id,this.clientBuilding.deviceCount), // Will only get Occupancy_Sensor_Equipment devices
-        this.apiClient.getBuildingMeasurementValues(this.clientBuilding.id,this.clientBuilding.measurementCount) // Will get all measurement values ( including temperature stuff, but will get filtered out)
+        this.apiClient.getBuildingOccupancyMeasurements(this.clientBuilding.id) // Will get all measurement values ( including temperature stuff, but will get filtered out)
       ])
       buildingMeasures = buildingMeasures.filter(m => ['Occupancy_Status','Occupancy_Count_Sensor'].includes(m.ontologyType));
       console.log(`Done ! Found ${buildingDevices.length} devices and ${buildingMeasures.length} measures.`);

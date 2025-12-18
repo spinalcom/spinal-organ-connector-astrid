@@ -176,6 +176,19 @@ export class ClientApi {
     return this.getWithRetry<IMeasurementValue[]>(`/Buildings/${buildingId}/MeasurementValues?take=${take}`);
   }
 
+  async getBuildingOccupancyMeasurements(buildingId: string) {
+    const [status, count] = await Promise.all([
+      this.getWithRetry<IMeasurementValue[]>(
+        `/Buildings/${buildingId}/MeasurementValues?ontologyType=Occupancy_Status&take=5000`
+      ),
+      this.getWithRetry<IMeasurementValue[]>(
+        `/Buildings/${buildingId}/MeasurementValues?ontologyType=Occupancy_Count_Sensor&take=5000`
+      )
+    ]);
+
+    return [...status, ...count];
+  }
+
   /**
    * Get floors for a specific building.
    * @param buildingId The ID of the building
@@ -197,7 +210,5 @@ export class ClientApi {
   async getBuildingSpaces(buildingId:string, take: number = 1000) {
     return this.getWithRetry<ISpace[]>(`/Buildings/${buildingId}/Spaces?take=${take}`);
   }
-
-
 
 }
