@@ -216,7 +216,7 @@ export class SyncRunPullApi {
         realNode,
         'default',
         'timeSeries maxDay',
-        { value: '14' }
+        { value: '60' }
       );
 
       return realNode;
