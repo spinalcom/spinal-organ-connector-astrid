@@ -323,7 +323,7 @@ export class SyncRunPullApi {
       const before = Date.now();
       try {
         console.log('Run...');
-        const buildingMeasures = await this.apiClient.getBuildingMeasurementValues(this.clientBuilding.id,this.clientBuilding.measurementCount);
+        const buildingMeasures = await this.apiClient.getBuildingOccupancyMeasurements(this.clientBuilding.id);
         const filteredMeasures = buildingMeasures.filter(m => ['Occupancy_Status','Occupancy_Count_Sensor'].includes(m.ontologyType));
         await this.updateEndpointValues(filteredMeasures);
         console.log('... Run finished !');
